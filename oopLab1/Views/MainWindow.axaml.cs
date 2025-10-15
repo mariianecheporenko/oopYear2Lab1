@@ -9,8 +9,15 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        DataContextChanged += (sender, args) => CreateTable();
-    }
+        DataContextChanged += (sender, args) => 
+        {
+            CreateTable(); 
+
+            if (DataContext is TableViewModel vm)
+            {
+                vm.TableLayoutChanged += CreateTable;
+            }
+        };    }
 
     private void CreateTable()
     {

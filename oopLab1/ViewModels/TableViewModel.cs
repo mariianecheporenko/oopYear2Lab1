@@ -2,11 +2,13 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System;
 
 namespace oopLab1.ViewModels;
 
 public partial class TableViewModel : ViewModelBase
 {
+    public event Action? TableLayoutChanged;
     private const int InitialRowCount = 20;
     private const int InitialColumnCount = 15;
 
@@ -39,10 +41,32 @@ public partial class TableViewModel : ViewModelBase
     private void Calculate() => Debug.WriteLine("Calculate Clicked");
 
     [RelayCommand]
-    private void AddRow() => Debug.WriteLine("Add Row Clicked");
+    private void AddRow() 
+    {
+        if (Table.Count == 0) return;
+        int columnCount = Table[0].Count;
+        var newRow = new ObservableCollection<Cell>();
+        for (int i = 0; i < columnCount; i++)
+        {
+            newRow.Add(new Cell());
+        }
+        Table.Add(newRow);
+
+        TableLayoutChanged?.Invoke();
+    }
+
 
     [RelayCommand]
-    private void AddColumn() => Debug.WriteLine("Add Column Clicked");
+    private void AddColumn()
+    {
+        if (Table.Count == 0) return;
+        foreach (var row in Table)
+        {
+            row.Add(new Cell());
+        }
+
+        TableLayoutChanged?.Invoke();
+    }
 
     [RelayCommand]
     private void Help() => Debug.WriteLine("Help Clicked");
