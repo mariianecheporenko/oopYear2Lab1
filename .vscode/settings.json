@@ -1,0 +1,6 @@
+{
+    "antlr4.generation": {
+        "language": "CSharp",
+        "outputDir": "Parser"
+    }
+}
