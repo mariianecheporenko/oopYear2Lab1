@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System;
+using oopLab1;
+using oopLab1.Logic;
 
 namespace oopLab1.ViewModels;
 
@@ -38,7 +40,61 @@ public partial class TableViewModel : ViewModelBase
     private void Load() => Debug.WriteLine("Load Clicked");
     
     [RelayCommand]
-    private void Calculate() => Debug.WriteLine("Calculate Clicked");
+    private void Calculate()
+    {
+        var calculator = new Calculator();
+        
+        Func<string, double> getCellValue = (cellName) =>
+        {
+            try 
+            {
+                char colLetter = cellName.ToUpper()[0];
+                int row = int.Parse(cellName.Substring(1)) - 1;
+                int col = colLetter - 'A';
+                
+                if (double.TryParse(Table[row][col].DisplayValue, out double value))
+                {
+                    return value;
+                }
+                return 0.0;
+            }
+            catch 
+            {
+                return 0.0;
+            }
+        };
+
+        foreach (var row in Table)
+        {
+            foreach (var cell in row)
+            {
+                if (!string.IsNullOrWhiteSpace(cell.Expression))
+                {
+                    if (cell.Expression.StartsWith("="))
+                    {
+                        try
+                        {
+                            string formula = cell.Expression.Substring(1);
+                            double result = calculator.Calculate(formula, getCellValue); // Використовуємо правильну змінну
+                            cell.DisplayValue = result.ToString();
+                        }
+                        catch (Exception)
+                        {
+                            cell.DisplayValue = "#ERROR"; 
+                        }
+                    }
+                    else
+                    {
+                        cell.DisplayValue = cell.Expression;
+                    }
+                }
+                else
+                {
+                    cell.DisplayValue = string.Empty;
+                }
+            }
+        }
+    }
 
     [RelayCommand]
     private void AddRow() 
@@ -51,10 +107,8 @@ public partial class TableViewModel : ViewModelBase
             newRow.Add(new Cell());
         }
         Table.Add(newRow);
-
         TableLayoutChanged?.Invoke();
     }
-
 
     [RelayCommand]
     private void AddColumn()
@@ -64,7 +118,6 @@ public partial class TableViewModel : ViewModelBase
         {
             row.Add(new Cell());
         }
-
         TableLayoutChanged?.Invoke();
     }
 
