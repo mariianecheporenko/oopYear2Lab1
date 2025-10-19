@@ -1,10 +1,13 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System;
-using oopLab1;
 using oopLab1.Logic;
+using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 
 namespace oopLab1.ViewModels;
 
@@ -19,6 +22,14 @@ public partial class TableViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool _showFormulas = true;
+    [ObservableProperty]
+    private bool _isFormulaMode = true; // true = показуємо вирази, false = значення
+    public string ModeButtonText => IsFormulaMode ? "Режим: ВИРАЗ" : "Режим: ЗНАЧЕННЯ";
+    partial void OnIsFormulaModeChanged(bool value)
+    {
+        OnPropertyChanged(nameof(ModeButtonText));
+        Calculate();
+    }
 
     public TableViewModel()
     {
@@ -27,7 +38,7 @@ public partial class TableViewModel : ViewModelBase
             var row = new ObservableCollection<Cell>();
             for (int j = 0; j < InitialColumnCount; j++)
             {
-                row.Add(new Cell()); 
+                row.Add(new Cell());
             }
             Table.Add(row);
         }
@@ -38,66 +49,64 @@ public partial class TableViewModel : ViewModelBase
 
     [RelayCommand]
     private void Load() => Debug.WriteLine("Load Clicked");
-    
-    [RelayCommand]
-    private void Calculate()
-    {
-        var calculator = new Calculator();
-        
-        Func<string, double> getCellValue = (cellName) =>
-        {
-            try 
-            {
-                char colLetter = cellName.ToUpper()[0];
-                int row = int.Parse(cellName.Substring(1)) - 1;
-                int col = colLetter - 'A';
-                
-                if (double.TryParse(Table[row][col].DisplayValue, out double value))
-                {
-                    return value;
-                }
-                return 0.0;
-            }
-            catch 
-            {
-                return 0.0;
-            }
-        };
 
-        foreach (var row in Table)
+    [RelayCommand]
+private void Calculate()
+{
+    var calculator = new Calculator();
+
+    Func<string, double> getCellValue = (cellName) =>
+    {
+        try
         {
-            foreach (var cell in row)
+            char colLetter = cellName.ToUpper()[0];
+            int row = int.Parse(cellName.Substring(1)) - 1;
+            int col = colLetter - 'A';
+            if (double.TryParse(Table[row][col].DisplayValue, out double value))
+                return value;
+            return 0.0;
+        }
+        catch
+        {
+            return 0.0;
+        }
+    };
+
+    foreach (var row in Table)
+    {
+        foreach (var cell in row)
+        {
+            if (string.IsNullOrWhiteSpace(cell.Expression))
             {
-                if (!string.IsNullOrWhiteSpace(cell.Expression))
+                cell.DisplayValue = string.Empty;
+                continue;
+            }
+
+            if (cell.Expression.StartsWith("="))
+            {
+                string formula = cell.Expression.Substring(1);
+                try
                 {
-                    if (cell.Expression.StartsWith("="))
-                    {
-                        try
-                        {
-                            string formula = cell.Expression.Substring(1);
-                            double result = calculator.Calculate(formula, getCellValue); // Використовуємо правильну змінну
-                            cell.DisplayValue = result.ToString();
-                        }
-                        catch (Exception)
-                        {
-                            cell.DisplayValue = "#ERROR"; 
-                        }
-                    }
-                    else
-                    {
-                        cell.DisplayValue = cell.Expression;
-                    }
+                    double result = calculator.Calculate(formula, getCellValue);
+                    cell.DisplayValue = IsFormulaMode ? cell.Expression : result.ToString();
                 }
-                else
+                catch (Exception ex)
                 {
-                    cell.DisplayValue = string.Empty;
+                    cell.DisplayValue = "#ERROR";
+                    Debug.WriteLine($"Помилка в {cell.Expression}: {ex.Message}");
                 }
+            }
+            else
+            {
+                cell.DisplayValue = cell.Expression;
             }
         }
     }
+}
+
 
     [RelayCommand]
-    private void AddRow() 
+    private void AddRow()
     {
         if (Table.Count == 0) return;
         int columnCount = Table[0].Count;
@@ -122,5 +131,48 @@ public partial class TableViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void Help() => Debug.WriteLine("Help Clicked");
+    private async Task Help()
+    {
+        if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var window = desktop.MainWindow;
+            if (window != null)
+            {
+                var dialog = new Window
+                {
+                    Title = "Довідка",
+                    Width = 400,
+                    Height = 300,
+                    Content = new TextBlock
+                    {
+                        Text = "Лабораторна робота №1\n\n" +
+                               "Програма для роботи з електронними таблицями.\n\n" +
+                               "Підтримувані операції:\n" +
+                               "• Арифметичні: +, -, *, /, ^\n" +
+                               "• Порівняння: <, >, =\n" +
+                               "• Логічні: not\n" +
+                               "• Функції: mmax, mmin\n\n" +
+                               "Приклади формул:\n" +
+                               "=2+2\n" +
+                               "=A1*3\n" +
+                               "=mmax(A1,A2,A3)",
+                        TextWrapping = Avalonia.Media.TextWrapping.Wrap,
+                        Margin = new Avalonia.Thickness(20)
+                    }
+                };
+
+                await dialog.ShowDialog(window);
+            }
+        }
+    }
+
+    [RelayCommand]
+    private void ToggleMode()
+    {
+        IsFormulaMode = !IsFormulaMode;
+        Calculate(); // перерахувати для оновлення відображення
+    }
+
+    
 }
+

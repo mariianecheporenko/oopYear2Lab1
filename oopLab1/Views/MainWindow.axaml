@@ -18,12 +18,22 @@
             <Button Content="Додати Рядок" Command="{Binding AddRowCommand}"/>
             <Button Content="Додати Стовпчик" Command="{Binding AddColumnCommand}"/>
             <Button Content="Довідка" Command="{Binding HelpCommand}"/>
-            <ToggleButton Content="Вираз/Значення" IsChecked="{Binding ShowFormulas}"/>
+            <ToggleButton 
+                Content="{Binding ModeButtonText}"
+                IsChecked="{Binding IsFormulaMode, Mode=TwoWay}"
+                Margin="5"/>
+
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Grid Name="TableGrid" Margin="5">
-                </Grid>
-        </ScrollViewer>
+<ScrollViewer Grid.Row="1"
+              HorizontalScrollBarVisibility="Auto"
+              VerticalScrollBarVisibility="Auto">
+    <DataGrid ItemsSource="{Binding Table}"
+              AutoGenerateColumns="True"
+              HeadersVisibility="None"
+              Margin="5"
+              IsReadOnly="False" />
+</ScrollViewer>
+
     </Grid>
 </Window>

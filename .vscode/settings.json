@@ -1,6 +1,7 @@
 {
     "antlr4.generation": {
         "language": "CSharp",
-        "namespace": "oopLab1"
+        "namespace": "oopLab1",
+        "visitor": true,
     }
 }

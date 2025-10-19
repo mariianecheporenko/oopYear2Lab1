@@ -24,6 +24,7 @@ C:\Users\PC Home\.nuget\packages\avalonia.win32\11.3.6\lib\net8.0\Avalonia.Win32
 C:\Users\PC Home\.nuget\packages\avalonia.win32\11.3.6\lib\net8.0\Avalonia.Win32.dll
 C:\Users\PC Home\.nuget\packages\avalonia.x11\11.3.6\lib\net8.0\Avalonia.X11.dll
 C:\Users\PC Home\.nuget\packages\communitytoolkit.mvvm\8.4.0\lib\net8.0\CommunityToolkit.Mvvm.dll
+C:\Users\PC Home\.nuget\packages\dialoghost.avalonia\0.8.1\lib\netstandard2.0\DialogHost.Avalonia.dll
 C:\Users\PC Home\.nuget\packages\harfbuzzsharp\8.3.1.1\lib\net8.0\HarfBuzzSharp.dll
 C:\Users\PC Home\.nuget\packages\microcom.runtime\0.11.0\lib\net5.0\MicroCom.Runtime.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.10\ref\net9.0\Microsoft.CSharp.dll
@@ -31,6 +32,7 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.10\ref\net9.0\Micros
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.10\ref\net9.0\Microsoft.VisualBasic.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.10\ref\net9.0\Microsoft.Win32.Primitives.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.10\ref\net9.0\Microsoft.Win32.Registry.dll
+C:\Users\PC Home\.nuget\packages\messagebox.avalonia\3.2.0\lib\netstandard2.0\MsBox.Avalonia.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.10\ref\net9.0\mscorlib.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\9.0.10\ref\net9.0\netstandard.dll
 C:\Users\PC Home\.nuget\packages\skiasharp\2.88.9\lib\net6.0\SkiaSharp.dll

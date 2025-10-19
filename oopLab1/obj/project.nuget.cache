@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "4UKcSsX4zq0=",
+  "dgSpecHash": "KHxmbXOwBV8=",
   "success": true,
   "projectFilePath": "D:\\uni\\code\\vs\\github\\oopYear2Lab1\\oopLab1\\oopLab1.csproj",
   "expectedPackageFiles": [
@@ -21,11 +21,13 @@
     "C:\\Users\\PC Home\\.nuget\\packages\\avalonia.win32\\11.3.6\\avalonia.win32.11.3.6.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\avalonia.x11\\11.3.6\\avalonia.x11.11.3.6.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.0\\communitytoolkit.mvvm.8.4.0.nupkg.sha512",
+    "C:\\Users\\PC Home\\.nuget\\packages\\dialoghost.avalonia\\0.8.1\\dialoghost.avalonia.0.8.1.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\harfbuzzsharp\\8.3.1.1\\harfbuzzsharp.8.3.1.1.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\harfbuzzsharp.nativeassets.linux\\8.3.1.1\\harfbuzzsharp.nativeassets.linux.8.3.1.1.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\harfbuzzsharp.nativeassets.macos\\8.3.1.1\\harfbuzzsharp.nativeassets.macos.8.3.1.1.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\harfbuzzsharp.nativeassets.webassembly\\8.3.1.1\\harfbuzzsharp.nativeassets.webassembly.8.3.1.1.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\harfbuzzsharp.nativeassets.win32\\8.3.1.1\\harfbuzzsharp.nativeassets.win32.8.3.1.1.nupkg.sha512",
+    "C:\\Users\\PC Home\\.nuget\\packages\\messagebox.avalonia\\3.2.0\\messagebox.avalonia.3.2.0.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\microcom.runtime\\0.11.0\\microcom.runtime.0.11.0.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\skiasharp\\2.88.9\\skiasharp.2.88.9.nupkg.sha512",
     "C:\\Users\\PC Home\\.nuget\\packages\\skiasharp.nativeassets.linux\\2.88.9\\skiasharp.nativeassets.linux.2.88.9.nupkg.sha512",
