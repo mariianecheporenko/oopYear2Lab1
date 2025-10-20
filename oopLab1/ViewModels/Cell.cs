@@ -5,8 +5,8 @@ namespace oopLab1.ViewModels;
 public partial class Cell : ObservableObject
 {
     [ObservableProperty]
-    private string _expression = "";
+    private string _expression = string.Empty;
 
     [ObservableProperty]
-    private string _displayValue = "";
+    private string _displayValue = string.Empty;
 }

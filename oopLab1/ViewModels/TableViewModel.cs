@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 
+
 namespace oopLab1.ViewModels;
 
 public partial class TableViewModel : ViewModelBase
@@ -23,7 +24,7 @@ public partial class TableViewModel : ViewModelBase
     [ObservableProperty]
     private bool _showFormulas = true;
     [ObservableProperty]
-    private bool _isFormulaMode = true; // true = показуємо вирази, false = значення
+    private bool _isFormulaMode = true; // true = show formulas, false = value
     public string ModeButtonText => IsFormulaMode ? "Режим: ВИРАЗ" : "Режим: ЗНАЧЕННЯ";
     partial void OnIsFormulaModeChanged(bool value)
     {
@@ -33,6 +34,8 @@ public partial class TableViewModel : ViewModelBase
 
     public TableViewModel()
     {
+            Console.WriteLine("TableViewModel created!");
+
         for (int i = 0; i < InitialRowCount; i++)
         {
             var row = new ObservableCollection<Cell>();
@@ -44,25 +47,45 @@ public partial class TableViewModel : ViewModelBase
         }
     }
 
-    [RelayCommand]
-    private void Save() => Debug.WriteLine("Save Clicked");
+ [RelayCommand]
+private async Task Save()
+{
+    Debug.WriteLine("Save button clicked");
+}
 
-    [RelayCommand]
-    private void Load() => Debug.WriteLine("Load Clicked");
+[RelayCommand]
+private async Task Load()
+{
+    Debug.WriteLine("Load button clicked");
+}
 
-    [RelayCommand]
+[RelayCommand]
 private void Calculate()
 {
+        Console.WriteLine("========== CALCULATE STARTED ==========");
+
     var calculator = new Calculator();
 
-    Func<string, double> getCellValue = (cellName) =>
+    Func<string, double> getCellValue = null!;
+    getCellValue = (cellName) =>
     {
         try
         {
             char colLetter = cellName.ToUpper()[0];
             int row = int.Parse(cellName.Substring(1)) - 1;
             int col = colLetter - 'A';
-            if (double.TryParse(Table[row][col].DisplayValue, out double value))
+            
+            var expr = Table[row][col].Expression;
+            if (string.IsNullOrWhiteSpace(expr))
+                return 0.0;
+                
+            if (expr.StartsWith("="))
+            {
+                string formula = expr.Substring(1);
+                return calculator.Calculate(formula, getCellValue);
+            }
+            
+            if (double.TryParse(expr, out double value))
                 return value;
             return 0.0;
         }
@@ -82,28 +105,38 @@ private void Calculate()
                 continue;
             }
 
-            if (cell.Expression.StartsWith("="))
-            {
-                string formula = cell.Expression.Substring(1);
-                try
+                if (cell.Expression.StartsWith("="))
                 {
-                    double result = calculator.Calculate(formula, getCellValue);
-                    cell.DisplayValue = IsFormulaMode ? cell.Expression : result.ToString();
+                    if (IsFormulaMode)
+                    {
+                        cell.DisplayValue = cell.Expression;
+                    }
+                    else
+                    {
+                        string formula = cell.Expression.Substring(1);
+                        try
+                        {
+                            double result = calculator.Calculate(formula, getCellValue);
+                            cell.DisplayValue = result.ToString();
+                        }
+                        catch (Exception ex)
+                        {
+                            cell.DisplayValue = "#ERROR";
+                            Console.WriteLine($"Error in {cell.Expression}: {ex.Message}");
+                        }
+                    }
+                            Console.WriteLine($"Formula cell: '{cell.Expression}' → '{cell.DisplayValue}'");
+
                 }
-                catch (Exception ex)
+                else
                 {
-                    cell.DisplayValue = "#ERROR";
-                    Debug.WriteLine($"Помилка в {cell.Expression}: {ex.Message}");
+                    cell.DisplayValue = cell.Expression;
                 }
-            }
-            else
-            {
-                cell.DisplayValue = cell.Expression;
-            }
+                    Console.WriteLine($"Cell: Expression='{cell.Expression}', DisplayValue='{cell.DisplayValue}'");
+
         }
     }
 }
-
 
     [RelayCommand]
     private void AddRow()

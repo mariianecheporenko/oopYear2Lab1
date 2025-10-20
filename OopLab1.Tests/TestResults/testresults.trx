@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="89fa091e-1ae7-455f-873d-c0da7492fb00" name="PC Home@MARY-LAPTOP 2025-10-20 03:24:37" runUser="MARY-LAPTOP\PC Home" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-10-20T03:24:37.1588821+03:00" queuing="2025-10-20T03:24:37.1588824+03:00" start="2025-10-20T03:24:36.6114756+03:00" finish="2025-10-20T03:24:37.1643597+03:00" />
+  <TestSettings name="default" id="e3af7f2d-b065-4b36-a457-a746db695cf8">
+    <Deployment runDeploymentRoot="PC_Home_MARY-LAPTOP_2025-10-20_03_24_37" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2efedfb9-a6e8-4761-9c58-7ad9de2f0a9d" testId="eb9bee1f-ce3d-639e-43c1-3070b762d6c7" testName="Calculate_SimpleAddition_ReturnsCorrectSum" computerName="MARY-LAPTOP" duration="00:00:00.0130989" startTime="2025-10-20T03:24:37.0155164+03:00" endTime="2025-10-20T03:24:37.0472185+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2efedfb9-a6e8-4761-9c58-7ad9de2f0a9d" />
+    <UnitTestResult executionId="7cd9b21b-6039-4a02-93e5-d7770dbb84eb" testId="d61c7f96-5b79-4884-6d09-bae7868b3c01" testName="Calculate_MMax_Works" computerName="MARY-LAPTOP" duration="00:00:00.0134542" startTime="2025-10-20T03:24:37.0155064+03:00" endTime="2025-10-20T03:24:37.0472098+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7cd9b21b-6039-4a02-93e5-d7770dbb84eb" />
+    <UnitTestResult executionId="e1a7a9c1-f468-4425-a725-6684834d4823" testId="10a2ea85-de34-09a4-3ff7-62e5aaf3dbbd" testName="Calculate_WithCellReference_ReturnsCorrectValue" computerName="MARY-LAPTOP" duration="00:00:00.0130968" startTime="2025-10-20T03:24:37.0155236+03:00" endTime="2025-10-20T03:24:37.0472100+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e1a7a9c1-f468-4425-a725-6684834d4823" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Calculate_WithCellReference_ReturnsCorrectValue" storage="d:\uni\code\vs\github\oopyear2lab1\ooplab1.tests\bin\debug\net9.0\ooplab1.tests.dll" id="10a2ea85-de34-09a4-3ff7-62e5aaf3dbbd">
+      <Execution id="e1a7a9c1-f468-4425-a725-6684834d4823" />
+      <TestMethod codeBase="D:\uni\code\vs\github\oopYear2Lab1\OopLab1.Tests\bin\Debug\net9.0\OopLab1.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="OopLab1.Tests.CalculatorTests" name="Calculate_WithCellReference_ReturnsCorrectValue" />
+    </UnitTest>
+    <UnitTest name="Calculate_MMax_Works" storage="d:\uni\code\vs\github\oopyear2lab1\ooplab1.tests\bin\debug\net9.0\ooplab1.tests.dll" id="d61c7f96-5b79-4884-6d09-bae7868b3c01">
+      <Execution id="7cd9b21b-6039-4a02-93e5-d7770dbb84eb" />
+      <TestMethod codeBase="D:\uni\code\vs\github\oopYear2Lab1\OopLab1.Tests\bin\Debug\net9.0\OopLab1.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="OopLab1.Tests.CalculatorTests" name="Calculate_MMax_Works" />
+    </UnitTest>
+    <UnitTest name="Calculate_SimpleAddition_ReturnsCorrectSum" storage="d:\uni\code\vs\github\oopyear2lab1\ooplab1.tests\bin\debug\net9.0\ooplab1.tests.dll" id="eb9bee1f-ce3d-639e-43c1-3070b762d6c7">
+      <Execution id="2efedfb9-a6e8-4761-9c58-7ad9de2f0a9d" />
+      <TestMethod codeBase="D:\uni\code\vs\github\oopYear2Lab1\OopLab1.Tests\bin\Debug\net9.0\OopLab1.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="OopLab1.Tests.CalculatorTests" name="Calculate_SimpleAddition_ReturnsCorrectSum" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="eb9bee1f-ce3d-639e-43c1-3070b762d6c7" executionId="2efedfb9-a6e8-4761-9c58-7ad9de2f0a9d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d61c7f96-5b79-4884-6d09-bae7868b3c01" executionId="7cd9b21b-6039-4a02-93e5-d7770dbb84eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10a2ea85-de34-09a4-3ff7-62e5aaf3dbbd" executionId="e1a7a9c1-f468-4425-a725-6684834d4823" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for D:\uni\code\vs\github\oopYear2Lab1\OopLab1.Tests\bin\Debug\net9.0\OopLab1.Tests.dll (Workers: 16, Scope: MethodLevel)&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

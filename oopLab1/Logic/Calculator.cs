@@ -5,11 +5,7 @@ using System.Linq;
 
 namespace oopLab1.Logic;
 
-/// <summary>
-/// Простий калькулятор виразів для електронної таблиці
-/// Варіант 47: підтримує +, -, *, /, ^ (степінь), mmax(...), mmin(...), 
-/// порівняння (<, >, =), not, посилання на комірки
-/// </summary>
+
 public class Calculator
 {
     private string _expression;
@@ -18,7 +14,7 @@ public class Calculator
 
     public double Calculate(string expression, Func<string, double> getCellValue)
     {
-        _expression = expression.Replace(" ", ""); // Видаляємо пробіли
+        _expression = expression.Replace(" ", ""); 
         _position = 0;
         _getCellValue = getCellValue;
 
@@ -27,14 +23,13 @@ public class Calculator
 
         double result = ParseExpression();
 
-        // Перевіряємо що весь вираз розпарсився
         if (_position < _expression.Length)
             throw new Exception($"Неочікуваний символ на позиції {_position}: '{_expression[_position]}'");
 
         return result;
     }
 
-    // Пріоритет 1: Порівняння (найнижчий для логічних виразів)
+    // Priority 1: Comparison operators
     private double ParseExpression()
     {
         double left = ParseAddSub();
@@ -51,7 +46,7 @@ public class Calculator
                 {
                     '<' => left < right,
                     '>' => left > right,
-                    '=' => Math.Abs(left - right) < 1e-10, // Порівняння double з точністю
+                    '=' => Math.Abs(left - right) < 1e-10,
                     _ => false
                 };
                 
@@ -66,7 +61,7 @@ public class Calculator
         return left;
     }
 
-    // Пріоритет 2: Додавання і віднімання
+    // Priority 2: Addition and Subtraction
     private double ParseAddSub()
     {
         double left = ParseTerm();
@@ -89,7 +84,7 @@ public class Calculator
         return left;
     }
 
-    // Пріоритет 3: Множення і ділення
+    // Priority 3: Multiplication and Division
     private double ParseTerm()
     {
         double left = ParsePower();
@@ -119,7 +114,7 @@ public class Calculator
         return left;
     }
 
-    // Пріоритет 3: Степінь (найвищий з бінарних)
+    // Proiority 4: Power
     private double ParsePower()
     {
         double left = ParseUnary();
@@ -127,37 +122,37 @@ public class Calculator
         if (_position < _expression.Length && _expression[_position] == '^')
         {
             _position++;
-            double right = ParsePower(); // Права асоціативність для степеня
+            double right = ParsePower();
             left = Math.Pow(left, right);
         }
 
         return left;
     }
 
-    // Унарний мінус та NOT
+    // Unary operators: NOT, +, -
     private double ParseUnary()
     {
-        // NOT (логічне заперечення)
+        // NOT
         if (_position + 2 < _expression.Length)
         {
             string next3 = _expression.Substring(_position, Math.Min(3, _expression.Length - _position)).ToLower();
             if (next3 == "not")
             {
                 _position += 3;
-                // Пропускаємо пробіли (але ми їх вже видалили)
+                
                 double value = ParseUnary();
-                return value == 0.0 ? 1.0 : 0.0; // NOT: 0->1, інше->0
+                return value == 0.0 ? 1.0 : 0.0; // NOT: 0->1, else->0
             }
         }
 
-        // Унарний мінус
+        // Unary minus
         if (_position < _expression.Length && _expression[_position] == '-')
         {
             _position++;
             return -ParseUnary();
         }
 
-        // Унарний плюс
+        // Unary plus
         if (_position < _expression.Length && _expression[_position] == '+')
         {
             _position++;
@@ -167,23 +162,23 @@ public class Calculator
         return ParsePrimary();
     }
 
-    // Первинні елементи: числа, дужки, функції, посилання на комірки
+    // Priority 5: Primary (numbers, cell references, parentheses, functions)
     private double ParsePrimary()
     {
-        // Дужки
+        // Parentheses
         if (_position < _expression.Length && _expression[_position] == '(')
         {
-            _position++; // Пропускаємо '('
+            _position++; // Skip '('
             double result = ParseExpression();
             
             if (_position >= _expression.Length || _expression[_position] != ')')
                 throw new Exception("Очікується ')'");
             
-            _position++; // Пропускаємо ')'
+            _position++; // Skip ')'
             return result;
         }
 
-        // Функції mmax, mmin
+        // mmax, mmin
         if (_position < _expression.Length && char.IsLetter(_expression[_position]))
         {
             string name = ParseIdentifier();
@@ -193,11 +188,11 @@ public class Calculator
                 return ParseFunction(name.ToLower());
             }
 
-            // Інакше це посилання на комірку
+            // Else: cell reference
             return _getCellValue(name);
         }
 
-        // Число
+        // Number
         if (_position < _expression.Length && (char.IsDigit(_expression[_position]) || _expression[_position] == '.'))
         {
             return ParseNumber();
@@ -210,7 +205,6 @@ public class Calculator
     {
         int start = _position;
         
-        // Ім'я може складатися з букв і цифр (наприклад A1, B23, mmax)
         while (_position < _expression.Length && 
                (char.IsLetterOrDigit(_expression[_position])))
         {
@@ -243,18 +237,18 @@ public class Calculator
         if (_position >= _expression.Length || _expression[_position] != '(')
             throw new Exception($"Очікується '(' після {funcName}");
 
-        _position++; // Пропускаємо '('
+        _position++; // Skip '('
 
         List<double> args = new List<double>();
 
-        // Парсимо аргументи
+        // Parse arguments
         do
         {
             args.Add(ParseExpression());
 
             if (_position < _expression.Length && _expression[_position] == ',')
             {
-                _position++; // Пропускаємо ','
+                _position++; // Skip ','
             }
             else
             {
@@ -266,12 +260,12 @@ public class Calculator
         if (_position >= _expression.Length || _expression[_position] != ')')
             throw new Exception($"Очікується ')' в кінці {funcName}");
 
-        _position++; // Пропускаємо ')'
+        _position++; // Skip ')'
 
         if (args.Count == 0)
             throw new Exception($"{funcName} потребує хоча б один аргумент");
 
-        // Обчислюємо функцію
+        // Calculate function result
         if (funcName == "mmax")
             return args.Max();
         else if (funcName == "mmin")

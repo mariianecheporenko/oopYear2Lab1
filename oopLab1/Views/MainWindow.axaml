@@ -5,10 +5,9 @@
         x:DataType="vm:TableViewModel" 
         Title="OopLab1 - Електронні Таблиці">
 
-
     <Design.DataContext>
-        <vm:TableViewModel/> </Design.DataContext>
-
+        <vm:TableViewModel/>
+    </Design.DataContext>
 
     <Grid RowDefinitions="Auto, *" ColumnDefinitions="*">
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="5" Margin="5" HorizontalAlignment="Center">
@@ -22,18 +21,12 @@
                 Content="{Binding ModeButtonText}"
                 IsChecked="{Binding IsFormulaMode, Mode=TwoWay}"
                 Margin="5"/>
-
         </StackPanel>
 
-<ScrollViewer Grid.Row="1"
-              HorizontalScrollBarVisibility="Auto"
-              VerticalScrollBarVisibility="Auto">
-    <DataGrid ItemsSource="{Binding Table}"
-              AutoGenerateColumns="True"
-              HeadersVisibility="None"
-              Margin="5"
-              IsReadOnly="False" />
-</ScrollViewer>
-
+        <ScrollViewer Grid.Row="1"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto">
+            <Grid x:Name="TableGrid" />
+        </ScrollViewer>
     </Grid>
 </Window>

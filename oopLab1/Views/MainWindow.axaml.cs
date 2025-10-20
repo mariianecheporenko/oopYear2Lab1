@@ -7,70 +7,88 @@ namespace oopLab1.Views;
 public partial class MainWindow : Window
 {
     public MainWindow()
+{
+    InitializeComponent(); 
+    
+    DataContextChanged += (sender, args) => 
     {
-        DataContextChanged += (sender, args) => 
-        {
-            CreateTable(); 
+        CreateTable(); 
 
-            if (DataContext is TableViewModel vm)
-            {
-                vm.TableLayoutChanged += CreateTable;
-            }
-        };    }
+        if (DataContext is TableViewModel vm)
+        {
+            vm.TableLayoutChanged += CreateTable;
+        }
+    };
+}
 
     private void CreateTable()
+{
+    if (DataContext is not TableViewModel vm || vm.Table.Count == 0)
+        return;
+
+    var grid = this.FindControl<Grid>("TableGrid");
+    if (grid == null) return;
+    
+    grid.Children.Clear();
+    grid.RowDefinitions.Clear();
+    grid.ColumnDefinitions.Clear();
+
+    int rowCount = vm.Table.Count;
+    int colCount = vm.Table[0].Count;
+
+    for (int j = 0; j <= colCount; j++)
     {
-        if (DataContext is not TableViewModel vm || vm.Table.Count == 0)
-            return;
+        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+    }
 
-        var grid = this.FindControl<Grid>("TableGrid");
-        if (grid == null) return;
+    for (int i = 0; i <= rowCount; i++)
+    {
+        grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+    }
+
+    for (int j = 0; j < colCount; j++)
+    {
+        var header = new TextBlock 
+        { 
+            Text = GetColumnName(j + 1), 
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            Margin = new Avalonia.Thickness(5)
+        };
+        Grid.SetRow(header, 0);
+        Grid.SetColumn(header, j + 1);
+        grid.Children.Add(header);
+    }
+
+    for (int i = 0; i < rowCount; i++)
+    {
+        var rowHeader = new TextBlock 
+        { 
+            Text = (i + 1).ToString(), 
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+            Margin = new Avalonia.Thickness(5)
+        };
+        Grid.SetRow(rowHeader, i + 1);
+        Grid.SetColumn(rowHeader, 0);
+        grid.Children.Add(rowHeader);
         
-        grid.Children.Clear();
-        grid.RowDefinitions.Clear();
-        grid.ColumnDefinitions.Clear();
-
-        int rowCount = vm.Table.Count;
-        int colCount = vm.Table[0].Count;
-
-        for (int j = 0; j <= colCount; j++)
-        {
-            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-        }
-
-        for (int i = 0; i <= rowCount; i++)
-        {
-            grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-        }
-
         for (int j = 0; j < colCount; j++)
         {
-            var header = new TextBlock { Text = GetColumnName(j + 1), HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center };
-            Grid.SetRow(header, 0);
-            Grid.SetColumn(header, j + 1);
-            grid.Children.Add(header);
-        }
-
-        for (int i = 0; i < rowCount; i++)
-        {
-            var rowHeader = new TextBlock { Text = (i + 1).ToString(), VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
-            Grid.SetRow(rowHeader, i + 1);
-            Grid.SetColumn(rowHeader, 0);
-            grid.Children.Add(rowHeader);
-            
-            for (int j = 0; j < colCount; j++)
+            var cellTextBox = new TextBox
             {
-                var cellTextBox = new TextBox();
+                MinWidth = 80
+            };
 
-                cellTextBox.Bind(TextBox.TextProperty, new Binding($"Table[{i}][{j}].Expression"));
+            cellTextBox.Bind(TextBox.TextProperty, new Binding($"Table[{i}][{j}].Expression")
+            {
+                Mode = BindingMode.TwoWay
+            });
 
-                Grid.SetRow(cellTextBox, i + 1);
-                Grid.SetColumn(cellTextBox, j + 1);
-                grid.Children.Add(cellTextBox);
-            }
+            Grid.SetRow(cellTextBox, i + 1);
+            Grid.SetColumn(cellTextBox, j + 1);
+            grid.Children.Add(cellTextBox);
         }
     }
-    
+}
     private string GetColumnName(int index)
     {
         int dividend = index;
