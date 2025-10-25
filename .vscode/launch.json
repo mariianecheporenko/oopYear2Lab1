@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (Desktop)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/oopLab1/bin/Debug/net9.0/oopLab1.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/oopLab1",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        }
+    ]
+}

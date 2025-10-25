@@ -28,6 +28,8 @@ public partial class TableViewModel : ViewModelBase
     public string ModeButtonText => IsFormulaMode ? "Режим: ВИРАЗ" : "Режим: ЗНАЧЕННЯ";
     partial void OnIsFormulaModeChanged(bool value)
     {
+        Debug.WriteLine($"🔁 Mode changed: {(value ? "ВИРАЗ" : "ЗНАЧЕННЯ")}");
+
         OnPropertyChanged(nameof(ModeButtonText));
         Calculate();
     }
@@ -62,8 +64,7 @@ private async Task Load()
 [RelayCommand]
 private void Calculate()
 {
-        Console.WriteLine("========== CALCULATE STARTED ==========");
-
+    Debug.WriteLine("🧮 calculation started");
     var calculator = new Calculator();
 
     Func<string, double> getCellValue = null!;
@@ -74,23 +75,32 @@ private void Calculate()
             char colLetter = cellName.ToUpper()[0];
             int row = int.Parse(cellName.Substring(1)) - 1;
             int col = colLetter - 'A';
-            
+
+            if (row < 0 || row >= Table.Count || col < 0 || col >= Table[row].Count)
+            {
+                Debug.WriteLine($"⚠️ invalid cell reference {cellName}");
+                return 0.0;
+            }
+
             var expr = Table[row][col].Expression;
             if (string.IsNullOrWhiteSpace(expr))
                 return 0.0;
-                
+
             if (expr.StartsWith("="))
             {
                 string formula = expr.Substring(1);
                 return calculator.Calculate(formula, getCellValue);
             }
-            
-            if (double.TryParse(expr, out double value))
+
+            if (double.TryParse(expr, System.Globalization.NumberStyles.Float,
+                                System.Globalization.CultureInfo.InvariantCulture, out double value))
                 return value;
+
             return 0.0;
         }
-        catch
+        catch (Exception e)
         {
+            Debug.WriteLine($"⚠️ Error retrieving value for {cellName}: {e.Message}");
             return 0.0;
         }
     };
@@ -105,38 +115,35 @@ private void Calculate()
                 continue;
             }
 
-                if (cell.Expression.StartsWith("="))
+            if (cell.Expression.StartsWith("="))
+            {
+                string formula = cell.Expression.Substring(1);
+                try
                 {
-                    if (IsFormulaMode)
-                    {
-                        cell.DisplayValue = cell.Expression;
-                    }
-                    else
-                    {
-                        string formula = cell.Expression.Substring(1);
-                        try
-                        {
-                            double result = calculator.Calculate(formula, getCellValue);
-                            cell.DisplayValue = result.ToString();
-                        }
-                        catch (Exception ex)
-                        {
-                            cell.DisplayValue = "#ERROR";
-                            Console.WriteLine($"Error in {cell.Expression}: {ex.Message}");
-                        }
-                    }
-                            Console.WriteLine($"Formula cell: '{cell.Expression}' → '{cell.DisplayValue}'");
-
+                    double result = calculator.Calculate(formula, getCellValue);
+                    cell.DisplayValue = IsFormulaMode
+                        ? cell.Expression
+                        : result.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    Debug.WriteLine($"✅ {formula} = {result}");
                 }
-                else
+                catch (Exception ex)
                 {
-                    cell.DisplayValue = cell.Expression;
+                    cell.DisplayValue = "#ERROR";
+                    Debug.WriteLine($"💥 Error in {formula}: {ex.Message}");
                 }
-                    Console.WriteLine($"Cell: Expression='{cell.Expression}', DisplayValue='{cell.DisplayValue}'");
+            }
+            else
+            {
+                cell.DisplayValue = cell.Expression;
+            }
 
+            Debug.WriteLine($"Cell: Expression='{cell.Expression}', DisplayValue='{cell.DisplayValue}'");
         }
     }
+
+    Debug.WriteLine("✅ Calculation completed");
 }
+
 
     [RelayCommand]
     private void AddRow()
@@ -200,10 +207,12 @@ private void Calculate()
     }
 
     [RelayCommand]
-    private void ToggleMode()
+    private void ToggleFormulaMode()
     {
-        IsFormulaMode = !IsFormulaMode;
-        Calculate(); // перерахувати для оновлення відображення
+    IsFormulaMode = !IsFormulaMode;
+    Debug.WriteLine($"🔁 Toggled manually: {(IsFormulaMode ? "ВИРАЗ" : "ЗНАЧЕННЯ")}");
+    OnPropertyChanged(nameof(ModeButtonText));
+    Calculate();
     }
 
     

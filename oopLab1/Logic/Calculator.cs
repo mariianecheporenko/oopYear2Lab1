@@ -206,7 +206,7 @@ public class Calculator
         int start = _position;
         
         while (_position < _expression.Length && 
-               (char.IsLetterOrDigit(_expression[_position])))
+           (char.IsLetter(_expression[_position]) || char.IsDigit(_expression[_position])))
         {
             _position++;
         }
